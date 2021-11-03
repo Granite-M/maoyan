@@ -3,7 +3,7 @@
     <ul>
       <li
         :class="{ active: index == changeIndex }"
-        @click="change(index)"
+        @click="change(index, item.title)"
         v-for="(item, index) in list"
         :key="index"
       >
@@ -44,9 +44,41 @@ export default {
       changeIndex: 0,
     };
   },
+  created() {
+    this.title = this.$route.query.title;
+  },
+  watch: {
+    "$route.path": {
+      deep: true,
+      handler() {
+        this.title = this.$route.query.title;
+        this.changeIndex = this.$route.query.index || 0;
+      },
+    },
+  },
+  beforeDestroy() {
+    console.log("底部销毁了");
+  },
   methods: {
-    change(index) {
+    //选项卡切换
+
+    change(index, title) {
       this.changeIndex = index;
+
+      switch (this.changeIndex) {
+        case 0:
+          this.$router.push("/Home/MyList");
+          break;
+
+        default:
+          this.$router.push({
+            path: "/Vedio",
+            query: {
+              title,
+              index,
+            },
+          });
+      }
     },
   },
 };

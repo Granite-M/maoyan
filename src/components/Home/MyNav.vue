@@ -1,12 +1,12 @@
 <template>
   <div class="nav">
-    <div class="address">
-      上海 <span class="iconfont icon-xiajiantou"></span>
+    <div @click="toAddress" class="address">
+      {{ addrsss }} <span class="iconfont icon-xiajiantou"></span>
     </div>
     <ul>
       <li v-for="(item, index) in menuList" :key="index">
         <a
-          @click="changeIndex(index)"
+          @click="changeIndex(index, item)"
           :class="{ active: activeIndex === index }"
           href="javascript:;"
         >
@@ -14,8 +14,7 @@
         >
       </li>
     </ul>
-    <div class="serach"><span class="iconfont icon-sousuo
-"></span></div>
+    <div class="serach"><span class="iconfont icon-sousuo"></span></div>
   </div>
 </template>
 
@@ -26,12 +25,46 @@ export default {
     return {
       menuList: ["热映", "影院", "待映", "经典电影"],
       activeIndex: 0,
+      addrsss: "杭州",
     };
   },
   methods: {
-    changeIndex(index) {
-      this.activeIndex = index;
+    toAddress() {
+      console.log("toAddress");
+      this.$router.push({
+        path: "/Address",
+        query: {
+          // id: m.id,
+          // title: m.title,
+        },
+      });
     },
+    changeAddress(val) {
+      this.addrsss = val;
+    },
+    //选项卡切换
+    changeIndex(index, item) {
+      this.activeIndex = index;
+
+      switch (this.activeIndex) {
+        case 0:
+          this.$router.push("/Home/MyList");
+          break;
+        default:
+          this.$router.push({
+            path: "/Home/test",
+            query: {
+              title: item,
+            },
+          });
+      }
+    },
+  },
+  mounted() {
+    this.$bus.$on("getAddress", this.changeAddress);
+  },
+  beforeDestroy() {
+    console.log("nav 被销毁了");
   },
 };
 </script>
@@ -44,7 +77,6 @@ export default {
   padding: 0 15px;
   justify-content: space-between;
   .address {
-    width: 47px;
     color: @gray-color;
     font-size: @s-size;
     span {

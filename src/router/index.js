@@ -1,14 +1,46 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import Address from "../views/Address.vue";
+import Vedio from "../views/Vedio.vue";
+import test from "../components/Home/test.vue";
+import MyList from "../components/Home/MyList.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
+    redirect: "/home",
+  },
+  {
+    path: "/home",
     name: "Home",
     component: Home,
+    redirect: "/home/MyList",
+    children: [
+      {
+        path: "MyList",
+        name: "MyList",
+        component: MyList,
+      },
+      {
+        path: "test",
+        name: "test",
+        component: test,
+        props: true,
+      },
+    ],
+  },
+  {
+    path: "/Address",
+    name: "Address",
+    component: Address,
+  },
+  {
+    path: "/Vedio",
+    name: "Vedio",
+    component: Vedio,
   },
   {
     path: "/about",

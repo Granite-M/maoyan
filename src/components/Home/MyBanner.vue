@@ -31,6 +31,7 @@ export default {
   },
   mounted() {},
   methods: {
+    //获取 banner 数据  初始化横向滚动事件
     getBannerData() {
       fetch("http://www.pudge.wang:3080/api/rated/list")
         .then((response) => response.json())

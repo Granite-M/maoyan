@@ -1,6 +1,9 @@
 <template>
   <div>
-    <home></home>
+    <keep-alive>
+    
+    <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 

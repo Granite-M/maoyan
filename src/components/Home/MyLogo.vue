@@ -2,9 +2,7 @@
   <div class="logo">
     <a href=""><img src="@/assets/img/logo.png" alt="" /></a>
     <span>发现最新最热电影</span>
-    <a href=""
-      >打开App <span class="">&gt;</span>
-    </a>
+    <a href="">打开App <span class="">&gt;</span> </a>
   </div>
 </template>
 
@@ -38,7 +36,7 @@ export default {
       width: 94px;
       height: 39px;
       position: relative;
-    top: 12px;
+      top: 12px;
       left: 10px;
     }
   }

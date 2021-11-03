@@ -6,8 +6,8 @@
       <MyNav></MyNav>
     </div>
     <div>
-      <!-- <MyBanner></MyBanner> -->
-      <MyList></MyList>
+      <!-- <MyList></MyList> -->
+      <router-view></router-view>
     </div>
     <MyFooter></MyFooter>
   </div>

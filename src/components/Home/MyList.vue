@@ -22,7 +22,7 @@
             </div>
           </li>
           <li v-if="bottom">
-            <h3> 我也是有底线的</h3>
+            <h3>我也是有底线的</h3>
           </li>
         </ul>
       </div>
@@ -41,10 +41,11 @@ export default {
       list: [],
       more_id: [],
       bs: null,
-      bottom:false
+      bottom: false,
     };
   },
   filters: {
+    //过滤img 的src
     changeImgSrc(src) {
       src = src.replace(/\/w\.h/, "");
       return src;
@@ -55,6 +56,7 @@ export default {
     this.list = this.getListData();
   },
   methods: {
+    //初始化 纵向滚动事件 添加倒地事件
     Scroll() {
       this.bs = new BetterScroll(".movieList", {
         scrollX: false,
@@ -73,16 +75,18 @@ export default {
         this.bs.finishPullUp();
       });
     },
+    //请求新数据
     getMore() {
- 
-      if(!((this.list.length+2)<=this.more_id.length)){
-        this.bottom=true
-        console.log('已经到底了');
-        return 
+      //判断是否有新数据
+      if (!(this.list.length + 2 <= this.more_id.length)) {
+        this.bottom = true;
+        console.log("已经到底了");
+        return;
       }
       let ids = this.more_id.slice(this.list.length, this.list.length + 2);
       ids = ids.join(",");
       console.log(ids);
+      //发送请求
       fetch("http://www.pudge.wang:3080/api/movies/more", {
         method: "POST",
         body: JSON.stringify({ ids }),
@@ -94,18 +98,20 @@ export default {
         .then((res) => {
           this.list = this.list.concat(res.result);
           this.$nextTick(() => {
+            //重新初始化 bs
             this.bs.refresh();
           });
           console.log(this.list);
         });
     },
+    //初始化 data 数据
     getListData() {
       fetch("http://www.pudge.wang:3080/api/movies/list")
         .then((response) => response.json())
         .then(async (res) => {
           this.list = res.result;
 
-          this.more_id= [...new Set(res.ids)]
+          this.more_id = [...new Set(res.ids)];
           console.log(this.more_id);
           await this.$nextTick(() => {
             this.Scroll();
@@ -158,17 +164,14 @@ export default {
             width: 43px;
             height: 14px;
           }
-       
-   
-          
         }
         > p {
           width: 180px;
           .textover();
-                  > span{
-             color: #faaf00;
-             font-weight: 800;
-            }
+          > span {
+            color: #faaf00;
+            font-weight: 800;
+          }
         }
       }
       > div:nth-of-type(3) {
@@ -196,12 +199,12 @@ export default {
           background-color: skyblue;
         }
       }
-      h3{
+      h3 {
         padding-top: 10px;
         width: 100%;
-        text-align:  center;
+        text-align: center;
         color: @gray-color;
-        font-family: '楷体';
+        font-family: "楷体";
         border-top: 1px solid gray;
       }
     }
