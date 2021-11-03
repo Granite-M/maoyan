@@ -39,7 +39,8 @@ export default {
   name: "MyList",
   data() {
     return {
-      list: {},
+      list: [],
+      more_id: [],
     };
   },
 
@@ -48,18 +49,55 @@ export default {
     this.list = this.getListData();
   },
   methods: {
+    Scroll() {
+      const bs = new BetterScroll(".movieList", {
+        scrollX: false,
+        scrollY: true,
+        click: true,
+        pullUpLoad: {
+          // 阈值
+          threshold: 200,
+        },
+      });
+      // 监听拉到底的事件
+      bs.on("pullingUp", () => {
+        console.log("我拉到底了");
+        this.getMore();
+      });
+    },
+    getMore() {
+      console.log("我要去请求新数据了");
+      let ids = this.more_id.slice(
+        this.list.length ,
+        this.list.length + 5
+      );
+      ids = ids.join(",");
+      console.log(ids);
+      fetch("http://www.pudge.wang:3080/api/movies/more", {
+        method: "POST",
+        body: JSON.stringify({ ids,}),
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+      })
+        .then((response) => response.json())
+        .then((res) => {
+          this.list = this.list.concat(res.result);
+          console.log( this.list);
+          this.$forceUpdate()
+        });
+    },
     getListData() {
       fetch("http://www.pudge.wang:3080/api/movies/list")
         .then((response) => response.json())
         .then(async (res) => {
           this.list = res.result;
-          console.log(this.list);
+          this.more_id = res.ids;
+          console.log(this.more_id);
+
           await this.$nextTick();
-          new BetterScroll(".movieList", {
-            scrollX: false,
-            scrollY: true,
-            click: true,
-          });
+
+          this.Scroll();
         });
     },
   },
