@@ -57,7 +57,7 @@ export default {
 
 footer {
   height: 48px;
-  background-color: pink;
+  // background-color: pink;
   border-top: 1px solid @border-color;
   ul {
     display: flex;

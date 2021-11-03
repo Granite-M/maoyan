@@ -52,7 +52,7 @@ export default {
 <style lang='less' scoped>
 @import url(../../assets/css/var.less);
 .banner {
-  background-color: pink;
+  // background-color: pink;
 
   > p {
     font-size: @s-size;

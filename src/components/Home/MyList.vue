@@ -3,17 +3,13 @@
     <div class="movieList">
       <div>
         <MyBanner></MyBanner>
-
         <ul>
           <li v-for="item in list" :key="item._id">
             <div>
-              <img
-                src="http://iph.href.lu/64x90?text=[图片已失效]&fg=063896&bg=ffefef"
-                alt=""
-              />
+              <img :src="item.img | changeImgSrc" alt="" />
             </div>
             <div>
-              <h4>{{ item.nm }} 3D MAX</h4>
+              <h4>{{ item.nm }}</h4>
               <p>
                 观众评 <span>{{ item.sc }}</span>
               </p>
@@ -24,6 +20,9 @@
               <div v-if="item.preShow" class="red">购票</div>
               <div v-else class="blue">预售</div>
             </div>
+          </li>
+          <li v-if="bottom">
+            <h3> 我也是有底线的</h3>
           </li>
         </ul>
       </div>
@@ -41,41 +40,52 @@ export default {
     return {
       list: [],
       more_id: [],
+      bs: null,
+      bottom:false
     };
   },
-
+  filters: {
+    changeImgSrc(src) {
+      src = src.replace(/\/w\.h/, "");
+      return src;
+    },
+  },
   components: { MyBanner },
   created() {
     this.list = this.getListData();
   },
   methods: {
     Scroll() {
-      const bs = new BetterScroll(".movieList", {
+      this.bs = new BetterScroll(".movieList", {
         scrollX: false,
         scrollY: true,
         click: true,
+        pullDownRefresh: true,
         pullUpLoad: {
           // 阈值
-          threshold: 200,
+          threshold: 400,
         },
       });
       // 监听拉到底的事件
-      bs.on("pullingUp", () => {
-        console.log("我拉到底了");
-        this.getMore();
+      this.bs.on("pullingUp", async () => {
+        console.log("getmore");
+        await this.getMore();
+        this.bs.finishPullUp();
       });
     },
     getMore() {
-      console.log("我要去请求新数据了");
-      let ids = this.more_id.slice(
-        this.list.length ,
-        this.list.length + 5
-      );
+ 
+      if(!((this.list.length+2)<=this.more_id.length)){
+        this.bottom=true
+        console.log('已经到底了');
+        return 
+      }
+      let ids = this.more_id.slice(this.list.length, this.list.length + 2);
       ids = ids.join(",");
       console.log(ids);
       fetch("http://www.pudge.wang:3080/api/movies/more", {
         method: "POST",
-        body: JSON.stringify({ ids,}),
+        body: JSON.stringify({ ids }),
         headers: new Headers({
           "Content-Type": "application/json",
         }),
@@ -83,8 +93,10 @@ export default {
         .then((response) => response.json())
         .then((res) => {
           this.list = this.list.concat(res.result);
-          console.log( this.list);
-          this.$forceUpdate()
+          this.$nextTick(() => {
+            this.bs.refresh();
+          });
+          console.log(this.list);
         });
     },
     getListData() {
@@ -92,12 +104,12 @@ export default {
         .then((response) => response.json())
         .then(async (res) => {
           this.list = res.result;
-          this.more_id = res.ids;
+
+          this.more_id= [...new Set(res.ids)]
           console.log(this.more_id);
-
-          await this.$nextTick();
-
-          this.Scroll();
+          await this.$nextTick(() => {
+            this.Scroll();
+          });
         });
     },
   },
@@ -107,21 +119,25 @@ export default {
 <style lang="less" scoped>
 @import url(../../assets/css/var.less);
 .list {
-  background-color: lightblue;
+  // background-color: lightblue;
   padding: 0 15px;
   .movieList {
     height: 465px;
     overflow: hidden;
     width: 100%;
+    // background-color: greenyellow;
   }
   ul {
     > li {
       display: flex;
       height: 114px;
       padding: 12px 0px;
-      // > div:nth-of-type(1) {
-
-      // }
+      > div:nth-of-type(1) {
+        img {
+          width: 64px;
+          height: 90px;
+        }
+      }
       > div:nth-of-type(2) {
         flex: 1;
         overflow: hidden;
@@ -136,12 +152,23 @@ export default {
         > h4 {
           color: @black-color;
           font-size: 17px;
-          width: 200px;
+          width: 180px;
           .textover();
+          img {
+            width: 43px;
+            height: 14px;
+          }
+       
+   
+          
         }
         > p {
-          width: 200px;
+          width: 180px;
           .textover();
+                  > span{
+             color: #faaf00;
+             font-weight: 800;
+            }
         }
       }
       > div:nth-of-type(3) {
@@ -168,6 +195,14 @@ export default {
         .blue {
           background-color: skyblue;
         }
+      }
+      h3{
+        padding-top: 10px;
+        width: 100%;
+        text-align:  center;
+        color: @gray-color;
+        font-family: '楷体';
+        border-top: 1px solid gray;
       }
     }
   }
