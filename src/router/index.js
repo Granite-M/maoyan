@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
-
 const routes = [
   {
     path: "/",
@@ -40,15 +39,17 @@ const routes = [
       {
         path: "/home/video",
         component: () => import("../components/Video/Video"),
-        props({ query: { homeIndex, title } }) {
-          return { homeIndex, title };
+        meta: { title: "影院票房_电影购票_评分_选座_经典影视推荐-猫眼电影" },
+        props({ query: { footerIndex, title } }) {
+          return { footerIndex, title };
         },
       },
       {
         path: "/home/miniVideo",
         component: () => import("../components/MiniVideo/MiniVideo"),
-        props({ query: { homeIndex, title } }) {
-          return { homeIndex, title };
+        meta: { title: "影院票房_电影购票_评分_选座_经典影视推荐-猫眼电影" },
+        props({ query: { footerIndex, title } }) {
+          return { footerIndex, title };
         },
       },
     ],
@@ -71,12 +72,17 @@ const routes = [
   {
     path: "/Show",
     component: () => import("../views/Show"),
+    meta: {
+      needlogin: true,
+    },
   },
   {
     path: "/mine",
     component: () => import("../views/Mine"),
+    meta: {
+      needlogin: true,
+    },
   },
-
   {
     path: "*",
     component: () => import("../views/NotFound"),
@@ -87,8 +93,19 @@ const router = new VueRouter({
   routes,
 });
 router.beforeEach((to, from, next) => {
-  // console.log(to, from);
+  if (to.meta.needlogin) {
+    if (!Number(localStorage.getItem("logined")) == 1) {
+      next("/login");
+    }
+  }
   next();
+});
+router.afterEach((to, from) => {
+  if (to.path == "/home/miniVideo" || to.path == "/home/video") {
+    document.title = to.meta.title;
+  } else {
+    document.title = "猫眼电影 - 娱乐看猫眼";
+  }
 });
 
 export default router;

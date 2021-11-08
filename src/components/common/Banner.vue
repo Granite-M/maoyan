@@ -3,7 +3,7 @@
     <p>最受好评电影</p>
     <div class="wrapper">
       <ul>
-        <li v-for="item in list" :key="item.id">
+        <li v-for="item in bannerMoviesList" :key="item.id">
           <div>
             <img :src="item.imgUrl" alt="" />
             <p v-if="item.score">观众评分{{ item.score }}</p>
@@ -14,52 +14,32 @@
       </ul>
     </div>
   </div>
-</template>
-
+</template> 
 <script>
 import BetterScroll from "better-scroll";
-
+import { mapState } from "vuex";
 export default {
   name: "MyBanner",
-  data() {
-    return {
-      list: {},
-    };
-  },
   created() {
-    this.getBannerData();
+    this.$nextTick(() => {
+      new BetterScroll(".wrapper", {
+        scrollX: true,
+        scrollY: false,
+        click: true,
+        mouseWheel: true, //开启鼠标滚轮
+        disableTouch: false, //启用手指触摸
+        // disableMouse: false, //启用鼠标拖动
+      });
+    });
   },
-  mounted() {},
-  methods: {
-    //获取 banner 数据  初始化横向滚动事件
-    getBannerData() {
-      fetch("http://www.pudge.wang:3080/api/rated/list")
-        .then((response) => response.json())
-        .then(async (res) => {
-          this.list = res.result;
-
-          await this.$nextTick(() => {
-            new BetterScroll(".wrapper", {
-              scrollX: true,
-              scrollY: false,
-              click: true,
-              mouseWheel: true, //开启鼠标滚轮
-              disableTouch: false, //启用手指触摸
-              // disableMouse: false, //启用鼠标拖动
-            });
-          });
-          this.$forceUpdate();
-        });
-    },
+  computed: {
+    ...mapState('hot',["bannerMoviesList"]),
   },
 };
 </script>
-
 <style lang='less' scoped>
 @import url(../../assets/css/var.less);
 .banner {
-  // background-color: pink;
-
   > p {
     font-size: @s-size;
     color: @black-color;
@@ -71,8 +51,7 @@ export default {
     overflow: hidden;
   }
   ul {
-    // overflow: auto;
-    // display: flex;
+    width: 1140px;
     display: inline-flex;
     li {
       width: 85px;
@@ -89,7 +68,6 @@ export default {
           width: 100%;
           position: absolute;
           bottom: 2px;
-
           height: 16px;
           background-image: linear-gradient(to bottom, grey, black);
           font-size: 11px;

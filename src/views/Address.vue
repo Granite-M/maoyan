@@ -12,7 +12,6 @@
         item.name
       }}</span>
     </div>
-
     <van-index-bar :index-list="indexList">
       <div class="citiesList" v-for="(item, index) in list" :key="index">
         <van-index-anchor :index="item.prefix.toUpperCase()">{{
@@ -31,6 +30,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Address",
   data() {
@@ -41,26 +41,18 @@ export default {
     };
   },
   created() {
-    fetch("http://www.pudge.wang:3080/api/area/list")
-      .then((Response) => {
-        return Response.json();
-      })
-      .then((res) => {
-        this.list = res.result;
-        this.$nextTick(() => {
-          this.hotcity = this.list.shift();
-          console.log(this.list);
-          this.list.forEach((ele) => {
-            this.indexList.push(ele.prefix.toUpperCase());
-          });
-        });
-      });
+    this.list = this.addressList;
+    this.hotcity = this.list.shift();
+    this.list.forEach((ele) => this.indexList.push(ele.prefix.toUpperCase()));
   },
   mounted() {},
+  computed: {
+    ...mapState("address", ["addressList"]),
+  },
   methods: {
     getAddress(e) {
       if (e.target.nodeName == "SPAN" || e.target.nodeName == "P") {
-        this.$bus.$emit("getAddress", e.target.innerHTML);
+        localStorage.setItem("address", e.target.innerHTML);
         this.$router.push({
           path: "/",
           query: {},
@@ -68,7 +60,7 @@ export default {
       }
     },
     setAddress(name) {
-      this.$bus.$emit("getAddress", name);
+      localStorage.setItem("address", name);
       this.$router.push({
         path: "/",
         query: {},

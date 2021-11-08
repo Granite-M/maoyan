@@ -25,16 +25,18 @@ export default {
     return {
       menuList: ["热映", "影院", "待映", "经典电影"],
       activeIndex: 0,
-      addrsss: "杭州",
+      addrsss: "",
     };
   },
-  props:['title','homeIndex'],
+  props: ["title", "homeIndex"],
   watch: {
-
+    "$route.path"() {
+      this.addrsss = localStorage.getItem("address");
+    },
   },
   created() {
-
-      this.activeIndex = this.$route.query.homeIndex
+    this.activeIndex = this.$route.query.homeIndex || 0;
+    this.addrsss = localStorage.getItem("address") || "杭州";
   },
   methods: {
     toAddress() {
@@ -50,7 +52,6 @@ export default {
     //选项卡切换
     changeIndex(index, title) {
       this.activeIndex = index;
-
       switch (this.activeIndex) {
         case 0:
           this.$router.push({
@@ -91,7 +92,6 @@ export default {
         default:
           this.$router.push({
             path: "/notFound",
-            // name:'test',
             query: {
               title,
               homeIndex,
@@ -100,16 +100,8 @@ export default {
       }
     },
   },
-  mounted() {
-    this.$bus.$on("getAddress", this.changeAddress);
-  },
-  beforeDestroy() {
-    this.$bus.$off("getAddress");
-    console.log("nav 被销毁了");
-  },
 };
 </script>
-
 <style lang='less' scoped>
 @import url(../../assets/css/var.less);
 .nav {

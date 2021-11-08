@@ -4,7 +4,11 @@
       <div>
         <MyBanner></MyBanner>
         <ul>
-          <li v-for="item in list" :key="item._id" @click="toDetail(item.movieid)">
+          <li
+            v-for="item in hotList"
+            :key="item._id"
+            @click="toDetail(item.movieid)"
+          >
             <div>
               <img :src="item.img | changeImgSrc" alt="" />
             </div>
@@ -29,17 +33,14 @@
     </div>
   </div>
 </template>
-
 <script>
 import BetterScroll from "better-scroll";
 import MyBanner from "../common/Banner.vue";
-
+import { mapState } from "vuex";
 export default {
-  name: "MyList",
+  name: "Hot",
   data() {
     return {
-      list: [],
-      more_id: [],
       bs: null,
       bottom: false,
     };
@@ -47,13 +48,17 @@ export default {
   filters: {
     //过滤img 的src
     changeImgSrc(src) {
-      src = src.replace(/\/w\.h/, "");
-      return src;
+      return (src = src.replace(/\/w\.h/, ""));
     },
   },
   components: { MyBanner },
   created() {
-    this.list = this.getListData();
+    this.$nextTick(() => {
+      this.Scroll();
+    });
+  },
+  computed: {
+    ...mapState("hot", ["more_idList", "hotList"]),
   },
   methods: {
     toDetail(id) {
@@ -61,7 +66,7 @@ export default {
       this.$router.push({
         path: "/detail",
         query: {
-          movieid:id
+          movieid: id,
         },
       });
     },
@@ -81,70 +86,41 @@ export default {
       });
       // 监听拉到底的事件
       this.bs.on("pullingUp", async () => {
-        console.log("getmore");
+        this.bs.refresh();
         await this.getMore();
         this.bs.finishPullUp();
       });
     },
     //请求新数据
     getMore() {
-      //判断是否有新数据
-      if (!(this.list.length + 2 <= this.more_id.length)) {
-        this.bottom = true;
-        console.log("已经到底了");
-        return;
-      }
-      let ids = this.more_id.slice(this.list.length, this.list.length + 2);
+      let ids = this.more_idList.slice(
+        this.hotList.length,
+        this.hotList.length + 2
+      );
       ids = ids.join(",");
-      console.log(ids);
-      //发送请求
-      fetch("http://www.pudge.wang:3080/api/movies/more", {
-        method: "POST",
-        body: JSON.stringify({ ids }),
-        headers: new Headers({
-          "Content-Type": "application/json",
-        }),
-      })
-        .then((response) => response.json())
-        .then((res) => {
-          this.list = this.list.concat(res.result);
-          this.$nextTick(() => {
-            //重新初始化 bs
-            this.bs.refresh();
-          });
-          console.log(this.list);
-        });
-    },
-    //初始化 data 数据
-    getListData() {
-      fetch("http://www.pudge.wang:3080/api/movies/list")
-        .then((response) => response.json())
-        .then(async (res) => {
-          this.list = res.result;
-
-          this.more_id = [...new Set(res.ids)];
-          console.log(this.more_id);
-          await this.$nextTick(() => {
-            this.Scroll();
-          });
-        });
+      //判断是否有新数据
+      if (ids) {
+        this.$store.dispatch("hot/getMore_idList", ids);
+      } else {
+        this.bottom = true;
+      }
     },
   },
 };
 </script>
-
 <style lang="less" scoped>
 @import url(../../assets/css/var.less);
 .hot {
-  // background-color: lightblue;
   padding: 0 15px;
   .movieList {
     height: 465px;
     overflow: hidden;
     width: 100%;
-    // background-color: greenyellow;
   }
   ul {
+    li:last-of-type {
+      height: 50px;
+    }
     > li {
       display: flex;
       height: 114px;
@@ -187,7 +163,6 @@ export default {
       }
       > div:nth-of-type(3) {
         position: relative;
-
         > div {
           width: 47px;
           height: 27px;
@@ -196,7 +171,6 @@ export default {
           line-height: 27px;
           position: absolute;
           color: white;
-
           position: relative;
           top: 50%;
           left: 50%;

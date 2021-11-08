@@ -1,19 +1,18 @@
 <template>
   <header>
     <div class="top">
-      <div class="left">猫眼电影</div>
+      <div class="left">{{ title }}</div>
       <div @click="change = !change" class="right">
         <ul v-show="change">
-          <li @click="fn(item)" v-for="(item, index) in menuList" :key="index">{{ item }}</li>
+          <li @click="fn(item)" v-for="(item, index) in menuList" :key="index">
+            {{ item }}
+          </li>
         </ul>
-
-       <span class="iconfont icon-daohang"></span>
+        <span class="iconfont icon-daohang"></span>
       </div>
     </div>
-   
   </header>
 </template>
-
 <script>
 export default {
   name: "MyHeader",
@@ -23,20 +22,18 @@ export default {
       menuList: ["首页", "榜单", "热点", "商城"],
     };
   },
-    methods: {
-      fn(ele){
-        console.log(ele);
-      }
+  props: ["title"],
+  methods: {
+    fn(ele) {
+      console.log(ele);
     },
+  },
 };
 </script>
-
 <style lang='less' scoped>
 @import url(../../assets/css/var.less);
-
 .top > {
   .center();
-
   height: 51px;
   font-size: @l-size;
   background-color: @theme-color;
@@ -50,18 +47,18 @@ export default {
     width: 50px;
     position: relative;
     text-align: center;
-    ul>{
+    ul > {
       position: absolute;
       background-color: #fff;
       border: solid 1px @border-color;
-      color: grey ;
+      color: grey;
       top: 30px;
       right: 10px;
-           z-index: 20;
-     li {
+      z-index: 20;
+      li {
         width: 110px;
-        height: 45px  ; 
-        text-align: center; 
+        height: 45px;
+        text-align: center;
         line-height: 45px;
         color: #333;
         font-size: 15px;
@@ -70,5 +67,4 @@ export default {
     }
   }
 }
-
 </style>

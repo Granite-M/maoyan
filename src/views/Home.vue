@@ -1,23 +1,18 @@
 <template>
   <div class="home">
-    <!-- <template v-if="title != title"> </template> -->
-
-    <template v-if="title == 'video' || title == 'minivideo'">
+    <template v-if="index == 1 || index == 2">
       <mylogo></mylogo>
-      <myheader></myheader>
+      <myheader title="猫眼电影"></myheader>
     </template>
-
-    <template v-else-if="title != 'video' && title != 'minivideo'">
-      <myheader></myheader>
+    <template v-else>
+      <myheader title="猫眼电影"></myheader>
       <mylogo></mylogo>
       <mynav></mynav>
     </template>
-
     <router-view></router-view>
     <myfooter></myfooter>
   </div>
 </template>
-
 <script>
 import myheader from "../components/common/Header.vue";
 import mylogo from "../components/common/Logo.vue";
@@ -26,24 +21,26 @@ import myfooter from "../components/common/Footer.vue";
 export default {
   data() {
     return {
-      title: "",
+      index: 0,
     };
   },
   components: { mynav, mylogo, myheader, myfooter },
   created() {
-     this.title = this.$route.query.title;
+    this.$store.dispatch("hot/getBannerMoviesList");
+    this.$store.dispatch("hot/getHotList");
+    this.$store.dispatch("address/getAddressList");
+    this.index = this.$route.query.footerIndex || 0;
   },
   watch: {
     "$route.path": {
       deep: true,
       handler() {
-        this.title = this.$route.query.title;
+        this.index = this.$route.query.footerIndex || 0;
       },
     },
   },
 };
 </script>
-
 <style lang='less' scoped>
 .home {
   height: 667px;

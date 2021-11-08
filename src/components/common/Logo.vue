@@ -5,7 +5,6 @@
     <a href="">打开App <span class="">&gt;</span> </a>
   </div>
 </template>
-
 <script>
 export default {
   name: "MyLogo",
@@ -14,7 +13,6 @@ export default {
   },
 };
 </script>
-
 <style lang='less' scoped>
 @import url(../../assets/css/var.less);
 .logo {

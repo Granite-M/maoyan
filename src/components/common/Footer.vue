@@ -13,7 +13,6 @@
     </ul>
   </footer>
 </template> 
-
 <script>
 export default {
   name: "MyFooter",
@@ -46,23 +45,19 @@ export default {
   },
   created() {
     this.title = this.$route.query.title;
-    this.changeIndex = this.$route.query.homeIndex || 0 },
+    this.changeIndex = this.$route.query.footerIndex || 0;
+  },
   watch: {
     "$route.path": {
-      deep: true,  
+      deep: true,
       handler() {
         this.title = this.$route.query.title;
-        this.changeIndex = this.$route.query.homeIndex || this.$route.query.footerIndex || 0;
-        console.log(1);
+        this.changeIndex = this.$route.query.footerIndex || 0;
       },
     },
   },
-  beforeDestroy() {
-    console.log("底部销毁了");
-  },
+  beforeDestroy() {},
   methods: {
-    //选项卡切换
-
     change(index, title) {
       this.changeIndex = index;
       switch (this.changeIndex) {
@@ -71,7 +66,7 @@ export default {
             path: "/home/hot",
             query: {
               title: "hot",
-              homeIndex: 0,
+              footerIndex: 0,
             },
           });
           break;
@@ -80,7 +75,7 @@ export default {
             path: "/home/video",
             query: {
               title: "video",
-              homeIndex: 1,
+              footerIndex: 1,
             },
           });
           break;
@@ -89,7 +84,7 @@ export default {
             path: "/home/minivideo",
             query: {
               title: "minivideo",
-              homeIndex: 2,
+              footerIndex: 2,
             },
           });
           break;
@@ -110,8 +105,7 @@ export default {
               footerIndex: 4,
             },
           });
-          break; 
-
+          break;
         default:
           this.$router.push({
             path: "/notFound",
@@ -126,10 +120,8 @@ export default {
   },
 };
 </script>
-
 <style lang='less' scoped>
 @import url(../../assets/css/var.less);
-
 footer {
   height: 48px;
   // background-color: pink;
@@ -138,7 +130,6 @@ footer {
     display: flex;
     font-size: @s-size;
     height: 100%;
-
     li {
       flex: 1;
       height: 100%;
@@ -148,12 +139,10 @@ footer {
       .iconfont {
         font-size: @l-size;
       }
-
       p {
         margin-top: 5px;
       }
     }
-
     .active {
       color: @theme-color;
     }

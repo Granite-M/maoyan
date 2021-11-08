@@ -1,19 +1,14 @@
-
-
 <template>
   <div class="MiniVideo">{{ title }},{{ index }}</div>
 </template>
-
 <script>
 export default {
-
   data() {
     return {};
   },
   props: ["title", "index"],
 };
 </script>
-
 <style lang="less" scoped>
 .MiniVideo {
   font-size: 50px;
