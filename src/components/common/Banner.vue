@@ -38,12 +38,17 @@ export default {
         .then(async (res) => {
           this.list = res.result;
 
-          await this.$nextTick();
-          new BetterScroll(".wrapper", {
-            scrollX: true,
-            scrollY: false,
-            click: true,
+          await this.$nextTick(() => {
+            new BetterScroll(".wrapper", {
+              scrollX: true,
+              scrollY: false,
+              click: true,
+              mouseWheel: true, //开启鼠标滚轮
+              disableTouch: false, //启用手指触摸
+              // disableMouse: false, //启用鼠标拖动
+            });
           });
+          this.$forceUpdate();
         });
     },
   },

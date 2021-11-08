@@ -4,10 +4,10 @@
       {{ addrsss }} <span class="iconfont icon-xiajiantou"></span>
     </div>
     <ul>
-      <li v-for="(item, index) in menuList" :key="index">
+      <li v-for="(item, homeIndex) in menuList" :key="homeIndex">
         <a
-          @click="changeIndex(index, item)"
-          :class="{ active: activeIndex === index }"
+          @click="changeIndex(homeIndex, item)"
+          :class="{ active: activeIndex == homeIndex }"
           href="javascript:;"
         >
           {{ item }}</a
@@ -28,33 +28,73 @@ export default {
       addrsss: "杭州",
     };
   },
+  props:['title','homeIndex'],
+  watch: {
+
+  },
+  created() {
+
+      this.activeIndex = this.$route.query.homeIndex
+  },
   methods: {
     toAddress() {
       console.log("toAddress");
       this.$router.push({
         path: "/Address",
-        query: {
-          // id: m.id,
-          // title: m.title,
-        },
+        query: {},
       });
     },
     changeAddress(val) {
       this.addrsss = val;
     },
     //选项卡切换
-    changeIndex(index, item) {
+    changeIndex(index, title) {
       this.activeIndex = index;
 
       switch (this.activeIndex) {
         case 0:
-          this.$router.push("/Home/MyList");
+          this.$router.push({
+            path: "/home/hot",
+            query: {
+              title: "hot",
+              homeIndex: 0,
+            },
+          });
+          break;
+        case 1:
+          this.$router.push({
+            path: "/home/cinema",
+            query: {
+              title: "cinema",
+              homeIndex: 1,
+            },
+          });
+          break;
+        case 2:
+          this.$router.push({
+            path: "/home/wait",
+            query: {
+              title: "wait",
+              homeIndex: 2,
+            },
+          });
+          break;
+        case 3:
+          this.$router.push({
+            path: "/home/classic",
+            query: {
+              title: "classic",
+              homeIndex: 3,
+            },
+          });
           break;
         default:
           this.$router.push({
-            path: "/Home/test",
+            path: "/notFound",
+            // name:'test',
             query: {
-              title: item,
+              title,
+              homeIndex,
             },
           });
       }
@@ -64,6 +104,7 @@ export default {
     this.$bus.$on("getAddress", this.changeAddress);
   },
   beforeDestroy() {
+    this.$bus.$off("getAddress");
     console.log("nav 被销毁了");
   },
 };

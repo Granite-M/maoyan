@@ -1,10 +1,10 @@
 <template>
-  <div class="list">
+  <div class="hot">
     <div class="movieList">
       <div>
         <MyBanner></MyBanner>
         <ul>
-          <li v-for="item in list" :key="item._id">
+          <li v-for="item in list" :key="item._id" @click="toDetail(item.movieid)">
             <div>
               <img :src="item.img | changeImgSrc" alt="" />
             </div>
@@ -32,7 +32,7 @@
 
 <script>
 import BetterScroll from "better-scroll";
-import MyBanner from "./MyBanner.vue";
+import MyBanner from "../common/Banner.vue";
 
 export default {
   name: "MyList",
@@ -56,12 +56,23 @@ export default {
     this.list = this.getListData();
   },
   methods: {
+    toDetail(id) {
+      console.log(id);
+      this.$router.push({
+        path: "/detail",
+        query: {
+          movieid:id
+        },
+      });
+    },
     //初始化 纵向滚动事件 添加倒地事件
     Scroll() {
       this.bs = new BetterScroll(".movieList", {
         scrollX: false,
         scrollY: true,
         click: true,
+        mouseWheel: true, //开启鼠标滚轮
+        disableTouch: false, //启用手指触摸
         pullDownRefresh: true,
         pullUpLoad: {
           // 阈值
@@ -124,7 +135,7 @@ export default {
 
 <style lang="less" scoped>
 @import url(../../assets/css/var.less);
-.list {
+.hot {
   // background-color: lightblue;
   padding: 0 15px;
   .movieList {

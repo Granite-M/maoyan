@@ -1,59 +1,94 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-import Address from "../views/Address.vue";
-import Vedio from "../views/Vedio.vue";
-import test from "../components/Home/test.vue";
-import MyList from "../components/Home/MyList.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    redirect: "/home",
+    redirect: "/home/hot",
   },
   {
     path: "/home",
-    name: "Home",
-    component: Home,
-    redirect: "/home/MyList",
+    component: () => import("../views/Home"),
     children: [
       {
-        path: "MyList",
-        name: "MyList",
-        component: MyList,
+        path: "/home/cinema",
+        component: () => import("../components/Cinema/Cinema"),
+        props({ query: { homeIndex, title } }) {
+          return { homeIndex, title };
+        },
       },
       {
-        path: "test",
-        name: "test",
-        component: test,
-        props: true,
+        path: "/home/wait",
+        component: () => import("../components/Cinema/Wait"),
+        props({ query: { homeIndex, title } }) {
+          return { homeIndex, title };
+        },
+      },
+      {
+        path: "/home/classic",
+        component: () => import("../components/Cinema/Classic "),
+        props({ query: { homeIndex, title } }) {
+          return { homeIndex, title };
+        },
+      },
+      {
+        path: "/home/hot",
+        component: () => import("../components/Cinema/Hot"),
+      },
+      {
+        path: "/home/video",
+        component: () => import("../components/Video/Video"),
+        props({ query: { homeIndex, title } }) {
+          return { homeIndex, title };
+        },
+      },
+      {
+        path: "/home/miniVideo",
+        component: () => import("../components/MiniVideo/MiniVideo"),
+        props({ query: { homeIndex, title } }) {
+          return { homeIndex, title };
+        },
       },
     ],
   },
   {
-    path: "/Address",
-    name: "Address",
-    component: Address,
+    path: "/detail",
+    component: () => import("../views/Detail"),
+    props({ query: { movieid } }) {
+      return { movieid };
+    },
   },
   {
-    path: "/Vedio",
-    name: "Vedio",
-    component: Vedio,
+    path: "/address",
+    component: () => import("../views/Address"),
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    //     const Foo = () => import(/* webpackChunkName: "group-foo" */ './Foo.vue')
+    path: "/login",
+    component: () => import("../views/Login"),
+  },
+  {
+    path: "/Show",
+    component: () => import("../views/Show"),
+  },
+  {
+    path: "/mine",
+    component: () => import("../views/Mine"),
+  },
+
+  {
+    path: "*",
+    component: () => import("../views/NotFound"),
   },
 ];
 
 const router = new VueRouter({
   routes,
+});
+router.beforeEach((to, from, next) => {
+  // console.log(to, from);
+  next();
 });
 
 export default router;

@@ -1,26 +1,14 @@
 <template>
-  <div class="list">{{ title }}</div>
+  <div class="list">{{ title }},{{ index }}</div>
 </template>
 
 <script>
 export default {
   name: "test",
   data() {
-    return {
-      title: "",
-    };
+    return {};
   },
-  created() {
-    this.title = this.$route.query.title;
-  },
-  watch: {
-    "$route.path": {
-      deep: true,
-      handler() {
-        this.title = this.$route.query.title;
-      },
-    },
-  },
+  props: ["title", "index"],
 };
 </script>
 

@@ -12,14 +12,39 @@
         item.name
       }}</span>
     </div>
-
+    <!-- <div
+      @click="getAddress"
+      class="citiesList"
+      v-for="(item, index) in list"
+      :key="index"
+    >
+      <h6>{{ item.prefix.toUpperCase() }}</h6>
+      <p v-for="city in item.cities" :key="city.cityId">{{ city.name }}</p>
+    </div> -->
+    <!-- <van-index-bar
+      @click="getAddress"
+      class="citiesList"
+      v-for="(item, index) in list"
+      :key="index"
+    >
+      <van-index-anchor :index="item.prefix.toUpperCase()" />
+      <van-cell
+        class="p"
+        :title="city.name"
+        v-for="city in item.cities"
+        :key="city.cityId"
+      /> -->
     <van-index-bar :index-list="indexList">
-      <div class="citiesList" v-for="(item, index) in list" :key="index">
+      <div
+        @click="getAddress"
+        class="citiesList"
+        v-for="(item, index) in list"
+        :key="index"
+      >
         <van-index-anchor :index="item.prefix.toUpperCase()">{{
           item.prefix.toUpperCase()
         }}</van-index-anchor>
         <van-cell
-          @click="setAddress(city.name)"
           class="p"
           :title="city.name"
           v-for="city in item.cities"
@@ -37,7 +62,7 @@ export default {
     return {
       list: [],
       hotcity: {},
-      indexList: [],
+      indexList: ["A", "C", "D", "W", "E", "R", "T", "U"],
     };
   },
   created() {
@@ -47,12 +72,14 @@ export default {
       })
       .then((res) => {
         this.list = res.result;
+       
         this.$nextTick(() => {
           this.hotcity = this.list.shift();
+         
           console.log(this.list);
-          this.list.forEach((ele) => {
-            this.indexList.push(ele.prefix.toUpperCase());
-          });
+          this.list.forEach((ele)=>{
+           this.indexList.push( ele.prefix.toUpperCase())
+          })
         });
       });
   },
@@ -61,18 +88,12 @@ export default {
     getAddress(e) {
       if (e.target.nodeName == "SPAN" || e.target.nodeName == "P") {
         this.$bus.$emit("getAddress", e.target.innerHTML);
+        console.log("    getAddress 事件触发了");
         this.$router.push({
           path: "/",
           query: {},
         });
       }
-    },
-    setAddress(name) {
-      this.$bus.$emit("getAddress", name);
-      this.$router.push({
-        path: "/",
-        query: {},
-      });
     },
   },
 };
@@ -117,8 +138,6 @@ export default {
         padding: 0;
         margin: 0;
         border: none;
-        position: relative;
-        bottom: 10px;
       }
     }
   }

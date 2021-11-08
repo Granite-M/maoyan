@@ -1,30 +1,47 @@
 <template>
   <div class="home">
-    <div>
-      <my-header></my-header>
-      <MyLogo></MyLogo>
-      <MyNav></MyNav>
-    </div>
-    <div>
-      <!-- <MyList></MyList> -->
-      <router-view></router-view>
-    </div>
-    <MyFooter></MyFooter>
+    <!-- <template v-if="title != title"> </template> -->
+
+    <template v-if="title == 'video' || title == 'minivideo'">
+      <mylogo></mylogo>
+      <myheader></myheader>
+    </template>
+
+    <template v-else-if="title != 'video' && title != 'minivideo'">
+      <myheader></myheader>
+      <mylogo></mylogo>
+      <mynav></mynav>
+    </template>
+
+    <router-view></router-view>
+    <myfooter></myfooter>
   </div>
 </template>
 
 <script>
-import MyHeader from "../components/Home/MyHeader.vue";
-import MyLogo from "../components/Home/MyLogo.vue";
-import MyNav from "../components/Home/MyNav.vue";
-import MyBanner from "../components/Home/MyBanner.vue";
-import MyList from "../components/Home/MyList.vue";
-import MyFooter from "../components/Home/MyFooter.vue";
+import myheader from "../components/common/Header.vue";
+import mylogo from "../components/common/Logo.vue";
+import mynav from "../components/common/Nav.vue";
+import myfooter from "../components/common/Footer.vue";
 export default {
-  name: "Home",
-  components: { MyHeader, MyNav, MyLogo, MyBanner, MyList, MyFooter },
+  data() {
+    return {
+      title: "",
+    };
+  },
+  components: { mynav, mylogo, myheader, myfooter },
+  created() {
+     this.title = this.$route.query.title;
+  },
+  watch: {
+    "$route.path": {
+      deep: true,
+      handler() {
+        this.title = this.$route.query.title;
+      },
+    },
+  },
 };
-// http://www.pudge.wang:3080/api/area/list
 </script>
 
 <style lang='less' scoped>
@@ -33,7 +50,7 @@ export default {
   user-select: none;
   display: flex;
   flex-direction: column;
-  > div:nth-of-type(2) {
+  > div:nth-of-type(3) {
     flex: 1;
     overflow: auto;
   }
