@@ -6,10 +6,9 @@ export default {
   },
   actions: {
     getMovieDetail(context, id) {
-      console.log("getMovieDetail", id);
       fetch("http://www.pudge.wang:3080/api/movies/detail", {
         method: "POST",
-        body: JSON.stringify({ id: 1228788 }),
+        body: JSON.stringify({ id: id }),
         headers: new Headers({
           "Content-Type": "application/json",
         }),
@@ -23,7 +22,6 @@ export default {
   mutations: {
     getMovieDetail(state, value) {
       state.detail = value;
-      console.log(state.detail);
     },
   },
   getters: {},

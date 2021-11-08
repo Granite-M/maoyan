@@ -88,7 +88,6 @@ const routes = [
     component: () => import("../views/NotFound"),
   },
 ];
-
 const router = new VueRouter({
   routes,
 });
@@ -107,5 +106,4 @@ router.afterEach((to, from) => {
     document.title = "猫眼电影 - 娱乐看猫眼";
   }
 });
-
 export default router;

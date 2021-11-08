@@ -62,7 +62,6 @@ export default {
   },
   methods: {
     toDetail(id) {
-      console.log(id);
       this.$router.push({
         path: "/detail",
         query: {

@@ -23,11 +23,6 @@ export default {
     };
   },
   props: ["title"],
-  methods: {
-    fn(ele) {
-      console.log(ele);
-    },
-  },
 };
 </script>
 <style lang='less' scoped>

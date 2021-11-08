@@ -20,7 +20,6 @@
     <div class="bottom">
       <div v-for="item in 10" :key="item">
         <h3>金逸影城（鞍山万象汇店）</h3>
-
         <p>铁东区建国南路700万象汇购物中心5层</p>
         <div class="">
           <div
@@ -48,7 +47,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import mylogo from "../components/common/Logo.vue";
 import myheader from "../components/common/Header.vue";
@@ -76,7 +74,6 @@ export default {
   },
 };
 </script>
-
 <style lang='less' scoped>
 .detail {
   .top {
@@ -122,7 +119,6 @@ export default {
     font-size: 14px;
     line-height: 45px;
   }
-
   .bottom {
     height: 321px;
     overflow: auto;

@@ -22,7 +22,6 @@ export default {
     },
     getMore_idList(context, ids) {
       //发送请求
-      console.log(ids);
       fetch("http://www.pudge.wang:3080/api/movies/more", {
         method: "POST",
         body: JSON.stringify({ ids }),

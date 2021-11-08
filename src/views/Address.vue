@@ -28,7 +28,6 @@
     </van-index-bar>
   </div>
 </template>
-
 <script>
 import { mapState } from "vuex";
 export default {
@@ -69,7 +68,6 @@ export default {
   },
 };
 </script>
-
  <style lang="less" scoped>
 @import url(../assets/css/var.less);
 .Address {

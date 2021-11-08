@@ -17,7 +17,6 @@
     <div class="serach"><span class="iconfont icon-sousuo"></span></div>
   </div>
 </template>
-
 <script>
 export default {
   name: "MyNav",
@@ -40,7 +39,6 @@ export default {
   },
   methods: {
     toAddress() {
-      console.log("toAddress");
       this.$router.push({
         path: "/Address",
         query: {},
@@ -130,7 +128,6 @@ export default {
         font-weight: 900;
         font-size: 17px;
         position: relative;
-
         &::after {
           content: "";
           width: 20px;

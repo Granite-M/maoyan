@@ -4,7 +4,6 @@
     <button @click="fn">退出登录</button>
   </div>
 </template>
-
 <script>
 export default {
   name: "mine",

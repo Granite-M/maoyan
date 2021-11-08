@@ -1,7 +1,6 @@
 <template>
   <div class="Video">{{ title }},{{ index }}</div>
 </template>
-
 <script>
 export default {
   data() {
