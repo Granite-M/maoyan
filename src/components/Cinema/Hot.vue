@@ -35,6 +35,7 @@
 </template>
 <script>
 import BetterScroll from "better-scroll";
+import NProgress from "nprogress";
 import MyBanner from "../common/Banner.vue";
 import { mapState } from "vuex";
 export default {
@@ -62,6 +63,7 @@ export default {
   },
   methods: {
     toDetail(id) {
+      NProgress.start();
       this.$router.push({
         path: "/detail",
         query: {

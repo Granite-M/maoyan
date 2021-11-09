@@ -1,6 +1,6 @@
 export default {
   namespaced: true,
-  state: { more_idList: [], bannerMoviesList: [], hotList: [] },
+  state: { more_idList: [], bannerMoviesList: [], hotList: [], flag: true },
   actions: {
     getBannerMoviesList(context) {
       fetch("http://www.pudge.wang:3080/api/rated/list")
@@ -22,17 +22,20 @@ export default {
     },
     getMore_idList(context, ids) {
       //发送请求
-      fetch("http://www.pudge.wang:3080/api/movies/more", {
-        method: "POST",
-        body: JSON.stringify({ ids }),
-        headers: new Headers({
-          "Content-Type": "application/json",
-        }),
-      })
-        .then((response) => response.json())
-        .then((res) => {
-          context.commit("getMore_idList", res.result);
-        });
+      if (context.state.flag) {
+        context.state.flag = false;
+        fetch("http://www.pudge.wang:3080/api/movies/more", {
+          method: "POST",
+          body: JSON.stringify({ ids }),
+          headers: new Headers({
+            "Content-Type": "application/json",
+          }),
+        })
+          .then((response) => response.json())
+          .then((res) => {
+            context.commit("getMore_idList", res.result);
+          });
+      }
     },
   },
   mutations: {
@@ -45,6 +48,7 @@ export default {
     },
     getMore_idList(state, value) {
       state.hotList = state.hotList.concat(value);
+      state.flag = true;
     },
   },
   getters: {},

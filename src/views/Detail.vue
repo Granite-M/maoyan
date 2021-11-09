@@ -48,6 +48,7 @@
   </div>
 </template>
 <script>
+import NProgress from "nprogress";
 import mylogo from "../components/common/Logo.vue";
 import myheader from "../components/common/Header.vue";
 import { mapState } from "vuex";
@@ -68,14 +69,34 @@ export default {
     //过滤img 的src
     changeImgSrc(src) {
       if (src) {
+        NProgress.done();
         return (src = src.replace(/\/w\.h/, ""));
       }
     },
   },
 };
 </script>
+
 <style lang='less' scoped>
+progress {
+  width: 168px;
+  height: 5px;
+  color: #f00;
+  background: #efeff4;
+  border-radius: 0.1rem;
+}
+/* 表示总长度背景色 */
+progress::-webkit-progress-bar {
+  background-color: green !important;
+  border-radius: 0.2rem;
+}
+/* 表示已完成进度背景色 */
+progress::-webkit-progress-value {
+  background: black !important;
+  border-radius: 0.2rem;
+}
 .detail {
+  user-select: none;
   .top {
     height: 189px;
     width: 100%;

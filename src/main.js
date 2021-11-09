@@ -2,6 +2,8 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import { IndexBar, IndexAnchor, Cell } from "vant";
 
+import 'nprogress/nprogress.css'
+
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
